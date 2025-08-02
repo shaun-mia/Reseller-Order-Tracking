@@ -7,9 +7,14 @@
     <link rel="stylesheet" href="styles/main.css">
     <link rel="stylesheet" href="styles/admin.css">
     <link rel="icon" type="image/png" href="https://i.ibb.co/Qzc31Cg/Fav-icon.png">
+    <style>
+        .hidden { display: none !important; }
+        .order-item { margin: 10px 0; padding: 10px; border: 1px solid #ddd; }
+        .action-buttons { margin-top: 10px; }
+    </style>
 </head>
 <body>
-    <div id="loginSection" class="container">
+    <div id="loginSection">
         <h2>Admin Login</h2>
         <form id="loginForm">
             <input type="email" id="adminEmail" placeholder="Admin Email" required>
@@ -18,7 +23,7 @@
         </form>
     </div>
 
-    <div id="adminDashboard" class="container hidden">
+    <div id="adminDashboard" class="hidden">
         <header>
             <h1>RO Mart Admin Dashboard</h1>
             <button id="logoutBtn">Logout</button>
@@ -28,15 +33,17 @@
             <section class="order-form">
                 <h2>Add/Edit Order</h2>
                 <form id="orderForm">
-                    <input type="text" id="orderId" placeholder="Order ID">
-                    <input type="text" id="customerNumber" placeholder="Customer Number">
-                    <input type="number" id="amount" placeholder="Total Amount">
-                    <input type="number" id="paidAmount" placeholder="Paid Amount">
-                    <select id="status">
+                    <input type="text" id="orderId" placeholder="Order ID" required>
+                    <input type="text" id="customerNumber" placeholder="Customer Number" required>
+                    <input type="number" id="amount" placeholder="Total Amount" required>
+                    <input type="number" id="paidAmount" placeholder="Paid Amount" required>
+                    <select id="status" required>
                         <option value="Pending">Pending</option>
+                        <option value="Processing">Processing</option>
                         <option value="Packaging">Packaging</option>
                         <option value="Shipped">Shipped</option>
                         <option value="Delivered">Delivered</option>
+                        <option value="Cancelled">Cancelled</option>
                     </select>
                     <button type="submit">Save Order</button>
                 </form>
@@ -46,23 +53,16 @@
                 <h2>Orders</h2>
                 <div id="ordersList"></div>
             </section>
-
-            <section class="admin-management">
-                <h2>Admin Management</h2>
-                <form id="adminForm">
-                    <input type="email" id="newEmail" placeholder="New Admin Email">
-                    <input type="password" id="newPassword" placeholder="New Admin Password">
-                    <button type="submit">Add Admin</button>
-                </form>
-                <div id="adminsList"></div>
-            </section>
         </main>
     </div>
 
-    <!-- Update Firebase script imports -->
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js";
-        import { getFirestore } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
+    <!-- Firebase Scripts -->
+    <script type="module" src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js"></script>
+    <script type="module" src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js"></script>
+    <script type="module" src="js/firebase-config.js"></script>
+    <script type="module" src="js/admin.js"></script>
+</body>
+</html>
         window.initializeApp = initializeApp;
         window.getFirestore = getFirestore;
     </script>

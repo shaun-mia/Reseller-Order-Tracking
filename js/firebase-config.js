@@ -16,10 +16,10 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
-// Function to initialize admin
+// Initialize admin
 async function initializeAdmin() {
     try {
-        const adminRef = doc(db, 'admins', 'admin1');  // Using a fixed ID for main admin
+        const adminRef = doc(db, 'admins', 'admin1');
         const adminDoc = await getDoc(adminRef);
 
         if (!adminDoc.exists()) {
@@ -37,10 +37,15 @@ async function initializeAdmin() {
     }
 }
 
-// Call the initialization function
+// Initialize admin on load
 initializeAdmin();
 
 export { db };
+    }
+}
 
-export { db };
+// Initialize admin on load
+await initializeAdmin();
+
+export { db, app };
 

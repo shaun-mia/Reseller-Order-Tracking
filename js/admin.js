@@ -1,7 +1,14 @@
 import { db } from './firebase-config.js';
 import { collection, query, where, getDocs, doc, setDoc, deleteDoc, getDoc } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
 
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', async () => {
+    // Add initialization check
+    if (!db) {
+        console.error('Firebase DB not initialized');
+        alert('Error: Database not connected');
+        return;
+    }
+
     const loginForm = document.getElementById('loginForm');
     const adminDashboard = document.getElementById('adminDashboard');
     const loginSection = document.getElementById('loginSection');
@@ -13,53 +20,46 @@ document.addEventListener('DOMContentLoaded', () => {
 
     let currentUser = null;
 
-    // Login functionality
+    // Update login functionality
     loginForm.addEventListener('submit', async (e) => {
         e.preventDefault();
-        const email = document.getElementById('adminEmail').value.trim().toLowerCase();
+        const email = document.getElementById('adminEmail').value.trim();
         const password = document.getElementById('password').value;
 
-        if (!email || !password) {
-            alert('Please enter both email and password');
-            return;
-        }
-
         try {
-            console.log('Attempting login...'); // Debug log
+            console.log('Attempting login...', email);
             const adminsRef = collection(db, 'admins');
-            const q = query(adminsRef, where('email', '==', email), where('password', '==', password));
+            const q = query(adminsRef, where('email', '==', email));
             const querySnapshot = await getDocs(q);
-
-            console.log('Query results:', querySnapshot.size); // Debug log
 
             if (!querySnapshot.empty) {
                 const adminDoc = querySnapshot.docs[0];
                 const adminData = adminDoc.data();
                 
-                currentUser = { id: adminDoc.id, ...adminData };
-                console.log('Login successful:', currentUser); // Debug log
-                
-                // Hide login, show dashboard
-                document.getElementById('loginSection').style.display = 'none';
-                document.getElementById('adminDashboard').style.display = 'block';
-                
-                // Load data
-                await loadOrders();
-                await loadAdmins();
+                if (adminData.password === password) {
+                    console.log('Login successful');
+                    currentUser = { id: adminDoc.id, ...adminData };
+                    document.getElementById('loginSection').style.display = 'none';
+                    document.getElementById('adminDashboard').style.display = 'block';
+                    await loadOrders();
+                    await loadAdmins();
+                } else {
+                    alert('Invalid password');
+                }
             } else {
-                alert('Invalid email or password');
+                alert('Admin not found');
             }
         } catch (error) {
             console.error('Login error:', error);
-            alert('Login failed. Please try again later.');
+            alert('Login failed: ' + error.message);
         }
     });
 
     // Logout functionality
     logoutBtn.addEventListener('click', () => {
         currentUser = null;
-        adminDashboard.classList.add('hidden');
-        loginSection.classList.remove('hidden');
+        adminDashboard.style.display = 'none';
+        loginSection.style.display = 'block';
         loginForm.reset();
     });
 
@@ -76,15 +76,19 @@ document.addEventListener('DOMContentLoaded', () => {
                 orderElement.className = 'order-item';
                 orderElement.innerHTML = `
                     <div>
-                        <strong>Order ID:</strong> ${doc.id}
+                        <strong>Order ID:</strong> ${order.orderId || doc.id}
+                        <br>
+                        <strong>Customer:</strong> ${order.customerNumber}
                         <br>
                         <strong>Status:</strong> ${order.status}
                         <br>
                         <strong>Amount:</strong> $${order.amount}
+                        <br>
+                        <strong>Paid:</strong> $${order.paidAmount}
                     </div>
                     <div class="action-buttons">
-                        <button onclick="editOrder('${doc.id}')">Edit</button>
-                        <button onclick="deleteOrder('${doc.id}')">Delete</button>
+                        <button onclick="window.editOrder('${doc.id}')">Edit</button>
+                        <button onclick="window.deleteOrder('${doc.id}')">Delete</button>
                     </div>
                 `;
                 ordersList.appendChild(orderElement);
@@ -212,6 +216,12 @@ document.addEventListener('DOMContentLoaded', () => {
                 await deleteDoc(adminRef);
                 loadAdmins();
             } catch (error) {
+                console.error('Error deleting admin:', error);
+                alert('Error deleting admin');
+            }
+        }
+    };
+});
                 console.error('Error deleting admin:', error);
                 alert('Error deleting admin');
             }
