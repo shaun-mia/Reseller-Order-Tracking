@@ -1,0 +1,50 @@
+#adminDashboard {
+    background: var(--background-color);
+    border: 2px solid var(--secondary-color);
+    box-shadow: none;
+}
+
+.order-form, .orders-list, .admin-management {
+    margin-bottom: 30px;
+    padding: 20px;
+    background: #f7f9fc;
+    border-radius: 5px;
+}
+
+#ordersList, #adminsList {
+    margin-top: 20px;
+}
+
+.order-item, .admin-item {
+    border: 1px solid var(--secondary-color);
+    box-shadow: none;
+    background: white;
+    padding: 15px;
+    margin: 10px 0;
+    border-radius: 5px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.action-buttons {
+    display: flex;
+    gap: 10px;
+}
+
+#logoutBtn {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    background-color: var(--secondary-color);
+}
+
+#loginSection {
+    max-width: 400px;
+    margin: 100px auto;
+    background: white;
+    padding: 30px;
+    border-radius: 10px;
+    border: 2px solid var(--secondary-color);
+    box-shadow: none;
+}

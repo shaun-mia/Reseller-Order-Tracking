@@ -1,0 +1,77 @@
+:root {
+    --primary-color: #ff0000;
+    --secondary-color: #000000;
+    --background-color: #ffffff;
+    --text-color: #000000;
+    --error-color: #ff0000;
+    --success-color: #008000;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: var(--background-color);
+    color: var(--text-color);
+    line-height: 1.6;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+header {
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+.hidden {
+    display: none;
+}
+
+button {
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 0; /* Sharp edges */
+    cursor: pointer;
+    transition: background-color 0.3s;
+    text-transform: uppercase;
+    font-weight: bold;
+}
+
+button:hover {
+    background-color: #cc0000;
+}
+
+input, select {
+    padding: 10px;
+    margin: 5px 0;
+    border: 1px solid #bdc3c7;
+    border-radius: 5px;
+    width: 100%;
+}
+
+.tracking-section {
+    border: 2px solid var(--secondary-color);
+    box-shadow: none;
+    max-width: 600px;
+    margin: 0 auto;
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+}
+
+.order-details {
+    margin-top: 20px;
+    padding: 20px;
+    background: #f7f9fc;
+    border-radius: 5px;
+}

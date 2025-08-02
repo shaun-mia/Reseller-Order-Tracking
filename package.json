@@ -1,0 +1,17 @@
+{
+  "name": "reseller-order-tracking",
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "start": "firebase serve --port=5000",
+    "login": "firebase login",
+    "init": "firebase init",
+    "deploy": "firebase deploy"
+  },
+  "dependencies": {
+    "firebase": "^9.22.0"
+  },
+  "devDependencies": {
+    "firebase-tools": "^12.4.0"
+  }
+}
