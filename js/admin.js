@@ -25,23 +25,27 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         try {
+            console.log('Attempting login...'); // Debug log
             const adminsRef = collection(db, 'admins');
             const q = query(adminsRef, where('email', '==', email), where('password', '==', password));
             const querySnapshot = await getDocs(q);
+
+            console.log('Query results:', querySnapshot.size); // Debug log
 
             if (!querySnapshot.empty) {
                 const adminDoc = querySnapshot.docs[0];
                 const adminData = adminDoc.data();
                 
-                if (adminData.isActive !== false) {
-                    currentUser = { id: adminDoc.id, ...adminData };
-                    loginSection.classList.add('hidden');
-                    adminDashboard.classList.remove('hidden');
-                    await loadOrders();
-                    await loadAdmins();
-                } else {
-                    alert('Your account is inactive. Please contact the administrator.');
-                }
+                currentUser = { id: adminDoc.id, ...adminData };
+                console.log('Login successful:', currentUser); // Debug log
+                
+                // Hide login, show dashboard
+                document.getElementById('loginSection').style.display = 'none';
+                document.getElementById('adminDashboard').style.display = 'block';
+                
+                // Load data
+                await loadOrders();
+                await loadAdmins();
             } else {
                 alert('Invalid email or password');
             }
