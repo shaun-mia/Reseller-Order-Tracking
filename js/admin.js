@@ -1,14 +1,7 @@
 import { db } from './firebase-config.js';
-import { collection, query, where, getDocs, doc, setDoc, deleteDoc, getDoc } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
+import { collection, query, where, getDocs, doc, setDoc, deleteDoc, getDoc } from "firebase/firestore";
 
-document.addEventListener('DOMContentLoaded', async () => {
-    // Add initialization check
-    if (!db) {
-        console.error('Firebase DB not initialized');
-        alert('Error: Database not connected');
-        return;
-    }
-
+document.addEventListener('DOMContentLoaded', () => {
     const loginForm = document.getElementById('loginForm');
     const adminDashboard = document.getElementById('adminDashboard');
     const loginSection = document.getElementById('loginSection');
@@ -20,14 +13,14 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     let currentUser = null;
 
-    // Update login functionality
+    // Login functionality
     loginForm.addEventListener('submit', async (e) => {
         e.preventDefault();
         const email = document.getElementById('adminEmail').value.trim();
         const password = document.getElementById('password').value;
 
         try {
-            console.log('Attempting login...', email);
+            console.log('Login attempt:', email);
             const adminsRef = collection(db, 'admins');
             const q = query(adminsRef, where('email', '==', email));
             const querySnapshot = await getDocs(q);
@@ -39,10 +32,13 @@ document.addEventListener('DOMContentLoaded', async () => {
                 if (adminData.password === password) {
                     console.log('Login successful');
                     currentUser = { id: adminDoc.id, ...adminData };
-                    document.getElementById('loginSection').style.display = 'none';
-                    document.getElementById('adminDashboard').style.display = 'block';
+                    
+                    // Update visibility
+                    loginSection.style.display = 'none';
+                    adminDashboard.style.display = 'block';
+                    
+                    // Load data
                     await loadOrders();
-                    await loadAdmins();
                 } else {
                     alert('Invalid password');
                 }
@@ -55,7 +51,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
     });
 
-    // Logout functionality
+    // Update logout to use style.display
     logoutBtn.addEventListener('click', () => {
         currentUser = null;
         adminDashboard.style.display = 'none';
@@ -72,24 +68,16 @@ document.addEventListener('DOMContentLoaded', async () => {
             
             querySnapshot.forEach((doc) => {
                 const order = doc.data();
-                const orderElement = document.createElement('div');
-                orderElement.className = 'order-item';
+                const due = order.amount - (order.paidAmount || 0);
+                const orderElement = document.createElement('tr');
                 orderElement.innerHTML = `
-                    <div>
-                        <strong>Order ID:</strong> ${order.orderId || doc.id}
-                        <br>
-                        <strong>Customer:</strong> ${order.customerNumber}
-                        <br>
-                        <strong>Status:</strong> ${order.status}
-                        <br>
-                        <strong>Amount:</strong> $${order.amount}
-                        <br>
-                        <strong>Paid:</strong> $${order.paidAmount}
-                    </div>
-                    <div class="action-buttons">
+                    <td>${order.orderId}</td>
+                    <td>${due.toLocaleString('bn-BD')} BDT</td>
+                    <td>${order.status}</td>
+                    <td>
                         <button onclick="window.editOrder('${doc.id}')">Edit</button>
                         <button onclick="window.deleteOrder('${doc.id}')">Delete</button>
-                    </div>
+                    </td>
                 `;
                 ordersList.appendChild(orderElement);
             });
@@ -98,11 +86,11 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
     }
 
-    // Save/Update order
+    // Update save order functionality
     orderForm.addEventListener('submit', async (e) => {
         e.preventDefault();
         const orderData = {
-            orderId: document.getElementById('orderId').value,
+            orderId: document.getElementById('orderId').value.toUpperCase(),
             customerNumber: document.getElementById('customerNumber').value,
             amount: parseFloat(document.getElementById('amount').value),
             paidAmount: parseFloat(document.getElementById('paidAmount').value),
@@ -224,7 +212,15 @@ document.addEventListener('DOMContentLoaded', async () => {
 });
                 console.error('Error deleting admin:', error);
                 alert('Error deleting admin');
-            }
-        }
-    };
-});
+                alert('Error deleting admin');
+
+  
+                console.error('Error deleting admin:', error);
+                alert('Error deleting admin');
+  
+                console.error('Error deleting admin:', error);
+                alert('Error deleting admin');
+  
+                console.error('Error deleting admin:', error);
+                alert('Error deleting admin');
+

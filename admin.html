@@ -8,9 +8,23 @@
     <link rel="stylesheet" href="styles/admin.css">
     <link rel="icon" type="image/png" href="https://i.ibb.co/Qzc31Cg/Fav-icon.png">
     <style>
+        #loginSection { display: block; }
+        #adminDashboard { display: none; }
         .hidden { display: none !important; }
         .order-item { margin: 10px 0; padding: 10px; border: 1px solid #ddd; }
         .action-buttons { margin-top: 10px; }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            padding: 10px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        th {
+            background-color: #f4f4f4;
+        }
     </style>
 </head>
 <body>
@@ -31,41 +45,50 @@
 
         <main>
             <section class="order-form">
-                <h2>Add/Edit Order</h2>
+                <h2>Add / Update Order</h2>
                 <form id="orderForm">
-                    <input type="text" id="orderId" placeholder="Order ID" required>
-                    <input type="text" id="customerNumber" placeholder="Customer Number" required>
-                    <input type="number" id="amount" placeholder="Total Amount" required>
-                    <input type="number" id="paidAmount" placeholder="Paid Amount" required>
+                    <input type="text" id="orderId" placeholder="e.g., ROMR-018..." required>
+                    <input type="text" id="customerNumber" placeholder="e.g., 01817527648" required>
+                    <input type="number" id="amount" placeholder="e.g., 2500" required>
+                    <input type="number" id="paidAmount" placeholder="e.g., 1000" required>
                     <select id="status" required>
                         <option value="Pending">Pending</option>
-                        <option value="Processing">Processing</option>
                         <option value="Packaging">Packaging</option>
                         <option value="Shipped">Shipped</option>
                         <option value="Delivered">Delivered</option>
-                        <option value="Cancelled">Cancelled</option>
+                        <option value="Returned">Returned</option>
                     </select>
-                    <button type="submit">Save Order</button>
+                    <div class="form-buttons">
+                        <button type="submit">Save Order</button>
+                        <button type="reset">Clear</button>
+                    </div>
                 </form>
             </section>
 
             <section class="orders-list">
-                <h2>Orders</h2>
-                <div id="ordersList"></div>
+                <h2>Current Orders</h2>
+                <table id="ordersTable">
+                    <thead>
+                        <tr>
+                            <th>Code</th>
+                            <th>Due</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="ordersList"></tbody>
+                </table>
             </section>
         </main>
     </div>
 
     <!-- Firebase Scripts -->
-    <script type="module" src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js"></script>
-    <script type="module" src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
     <script type="module" src="js/firebase-config.js"></script>
     <script type="module" src="js/admin.js"></script>
 </body>
 </html>
-        window.initializeApp = initializeApp;
-        window.getFirestore = getFirestore;
-    </script>
     <script type="module" src="js/firebase-config.js"></script>
     <script type="module" src="js/admin.js"></script>
 </body>
